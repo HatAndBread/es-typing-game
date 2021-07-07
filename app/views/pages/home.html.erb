@@ -6,11 +6,7 @@
   <% end %>
   <%= form_tag(search_path, :method => "get",   
     class: 'search-form') do %>
-    <div class="">
-      <%= search_field_tag :search, params[:search], placeholder: "Search", class: "" %>
-      <div class="input-group-btn">
-        <%= button_tag "Search", :class => '',:name => nil%>
-      </div>
-    </div>
+    <%= search_field_tag :search, params[:search], placeholder: "Teacher's name", class: "", autofocus: true %>
+    <%= button_tag "Search", :class => '',:name => nil%>
   <% end %>
 </div>
