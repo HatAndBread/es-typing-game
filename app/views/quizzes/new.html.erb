@@ -1,1 +1,1 @@
-<%= render(partial: 'shared/react', locals: {data: @quiz.to_json(include: :questions), page: 'new_quiz' })%>
+<%= render(partial: 'shared/react', locals: {data: @quiz.to_json(include: :questions), page: 'new_quiz', errors: local_assigns[:questions] ? local_assigns[:questions] : nil})%>

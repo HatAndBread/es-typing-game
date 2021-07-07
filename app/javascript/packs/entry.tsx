@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ? camel(JSON.parse(root.dataset.currentUser))
             : undefined
         }
+        errors={root.dataset.errors ? JSON.parse(root.dataset.errors) : null}
       />,
       root
     );

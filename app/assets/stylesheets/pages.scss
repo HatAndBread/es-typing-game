@@ -6,6 +6,23 @@ $light-blue: #72cdf4;
 $dark-blue: #005581;
 $gold: #ffd200;
 
+a {
+  text-decoration: none;
+}
+nav {
+  background-color: $light-blue;
+  width: 100vw;
+  height: 60px;
+  color: black;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: large;
+  a:visited {
+    color: black;
+  }
+  margin-bottom: 8px;
+}
 button,
 .link-btn {
   display: block;
@@ -15,11 +32,23 @@ button,
   border-radius: 8px;
   border: 1px solid;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.5s;
   margin: 8px;
   background-color: $light-blue;
   color: black;
   text-decoration: none;
   text-align: center;
   white-space: nowrap;
+}
+
+button:hover {
+  background-color: $yellow;
+}
+
+.link-btn:hover {
+  background-color: $yellow;
+}
+
+a:hover {
+  text-decoration: underline;
 }

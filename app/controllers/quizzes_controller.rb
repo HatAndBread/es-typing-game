@@ -15,9 +15,11 @@ class QuizzesController < ApplicationController
   def create
     @quiz = Quiz.create(quiz_params)
     @quiz.user = current_user
-    if @quiz.save!
+    if @quiz.save
       save_questions
       redirect_to quizzes_path
+    else
+      render :new, locals: { questions: params[:words] }
     end
   end
 
@@ -52,8 +54,10 @@ class QuizzesController < ApplicationController
 
   def save_questions
     @quiz.questions.destroy_all
+    return unless params[:words]
+
     params[:words].each do |word|
-      @question = Question.create!(word: word, quiz: @quiz)
+      Question.create(word: word, quiz: @quiz) unless word == ''
     end
   end
 end

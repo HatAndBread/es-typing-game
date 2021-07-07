@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 import QuizForm from "./Quizzes/QuizForm";
 import QuizzesIndex from "./Quizzes/QuizzesIndex";
+import QuizShow from "./Quizzes/QuizShow";
 import { CurrentUser } from "./Types/JsonTypes";
 
 type ContextProps = { currentUser: CurrentUser | null };
@@ -11,25 +12,30 @@ const ReactApp = ({
   data,
   page,
   currentUser,
+  errors,
 }: {
   data: any;
   page: string;
   currentUser: CurrentUser | null;
+  errors: any;
 }) => {
   const globals = { currentUser };
   const getPage = () => {
     switch (page) {
       case "new_quiz": {
-        return <QuizForm edit={false} quiz={data} />;
+        return <QuizForm edit={false} quiz={data} errors={errors} />;
       }
       case "edit_quiz": {
-        return <QuizForm edit={true} quiz={data} />;
+        return <QuizForm edit={true} quiz={data} errors={errors} />;
       }
       case "quizzes_index": {
         return <QuizzesIndex edit={true} quizzes={data} />;
       }
       case "teacher_index": {
         return <QuizzesIndex edit={false} quizzes={data} />;
+      }
+      case "show_quiz": {
+        return <QuizShow quiz={data} />;
       }
       default:
         return <></>;

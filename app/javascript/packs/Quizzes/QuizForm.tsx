@@ -5,11 +5,28 @@ import { getContext } from "../ReactApp";
 //@ts-ignore
 import garbage from "../../../assets/images/garbage.svg";
 
-const NewQuiz = ({ edit, quiz }: { edit: boolean; quiz: Quiz }) => {
+const NewQuiz = ({
+  edit,
+  quiz,
+  errors,
+}: {
+  edit: boolean;
+  quiz: Quiz;
+  errors: any;
+}) => {
+  const [acknowledgedErrors, setAcknowledgedErrors] = useState(
+    errors ? false : true
+  );
   const currentUser = getContext().currentUser;
+  useEffect(() => {
+    if (errors && !acknowledgedErrors) {
+      alert("That quiz name has already been used. Please choose a new one.");
+      setAcknowledgedErrors(true);
+    }
+  }, [acknowledgedErrors, setAcknowledgedErrors, errors]);
 
   const [words, setWords] = useState<string[]>(
-    quiz.questions.map((question) => question.word)
+    errors ? errors : quiz.questions.map((question) => question.word)
   );
   const addNewWord = () => {
     const newWords = words.map((word) => word);
@@ -46,6 +63,7 @@ const NewQuiz = ({ edit, quiz }: { edit: boolean; quiz: Quiz }) => {
           name='quiz[title]'
           id='quiz_title'
           defaultValue={quiz.title ? quiz.title : ""}
+          autoFocus
         />
         <label>Words</label>
         {words.map((word, index) => (
@@ -61,6 +79,7 @@ const NewQuiz = ({ edit, quiz }: { edit: boolean; quiz: Quiz }) => {
                 setWords(newArr);
               }}
               value={words[index]}
+              autoFocus
             />
 
             <img

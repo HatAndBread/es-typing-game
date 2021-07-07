@@ -2,6 +2,7 @@
   data-data="<%=data%>" 
   data-current-user="<%=current_user.to_json%>"
   data-page="<%=page%>"
+  data-errors="<%=local_assigns[:errors] ? errors.to_json : nil%>"
   >
 </div>
 <%= javascript_pack_tag 'entry' %>
