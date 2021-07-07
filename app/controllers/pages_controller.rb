@@ -6,7 +6,7 @@ class PagesController < ApplicationController
     if @teacher
       redirect_to teacher_url(@teacher.id)
     else
-      redirect_to root_path
+      render :home, locals: { errors: 'We could not find that teacher 😢 Please try again ✨' }
     end
   end
 end
