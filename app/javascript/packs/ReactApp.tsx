@@ -26,7 +26,10 @@ const ReactApp = ({
         return <QuizForm edit={true} quiz={data} />;
       }
       case "quizzes_index": {
-        return <QuizzesIndex quizzes={data} />;
+        return <QuizzesIndex edit={true} quizzes={data} />;
+      }
+      case "teacher_index": {
+        return <QuizzesIndex edit={false} quizzes={data} />;
       }
       default:
         return <></>;

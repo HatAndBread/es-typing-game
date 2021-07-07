@@ -6,5 +6,5 @@ Rails.application.routes.draw do
 
   resources :quizzes
   get 'teacher/:id', to: 'quizzes#teacher', as: :teacher
-  get 'search', to: 'pages#search', as: :search
+  get 'search/', to: 'pages#search', as: :search
 end

@@ -7,7 +7,13 @@ import garbage from "../../../assets/images/garbage.svg";
 import pencil from "../../../assets/images/pencil.svg";
 const token: any = document.querySelector('meta[name="csrf-token"]');
 
-const QuizzesIndex = ({ quizzes }: { quizzes: Quiz[] }) => {
+const QuizzesIndex = ({
+  quizzes,
+  edit,
+}: {
+  quizzes: Quiz[];
+  edit: boolean;
+}) => {
   console.log(quizzes);
   const currentUser = getContext().currentUser;
   const [quizArr, setQuizArr] = useState(quizzes);
@@ -42,7 +48,7 @@ const QuizzesIndex = ({ quizzes }: { quizzes: Quiz[] }) => {
           <a href={`/quizzes/${quiz.id}`} className='link-btn'>
             Play
           </a>
-          {currentUser ? (
+          {currentUser && edit ? (
             <div className='edit-delete'>
               <a href={`/quizzes/${quiz.id}/edit`}>
                 <img src={pencil} alt='✏️' width='24' />
