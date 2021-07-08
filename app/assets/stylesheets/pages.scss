@@ -8,6 +8,7 @@ $gold: #ffd200;
 
 a {
   text-decoration: none;
+  color: black;
 }
 nav {
   background-color: $light-blue;
@@ -26,7 +27,8 @@ nav {
 button,
 .link-btn {
   display: block;
-  width: 100px;
+  width: fit-content;
+  min-width: 100px;
   font-size: larger;
   padding: 8px;
   border-radius: 8px;
