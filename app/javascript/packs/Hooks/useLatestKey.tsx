@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
 
-const useLatestKey = () => {
+const useLatestKey = (
+  currentWord: string,
+  setCurrentWord: React.Dispatch<React.SetStateAction<string>>,
+  numberOfMistakes: number,
+  setNumberOfMistakes: React.Dispatch<React.SetStateAction<number>>
+): string => {
   const [latestKey, setLatestKey] = useState("");
+  const cw = currentWord.toLowerCase();
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
-      if (isValidLetter(e.key)) {
-        setLatestKey(e.key.toLowerCase());
+      const key = e.key.toLowerCase();
+      if (isValidLetter(key)) {
+        setLatestKey(key);
+        if (cw[0] === key) {
+          setCurrentWord(cw.substring(1, cw.length));
+        } else {
+          setNumberOfMistakes(numberOfMistakes + 1);
+        }
       }
     };
     window.addEventListener("keydown", handleKeydown);
@@ -14,7 +26,14 @@ const useLatestKey = () => {
       setLatestKey("");
       window.removeEventListener("keydown", handleKeydown);
     };
-  }, []);
+  }, [
+    setLatestKey,
+    setCurrentWord,
+    currentWord,
+    numberOfMistakes,
+    setNumberOfMistakes,
+  ]);
+
   return latestKey;
 };
 
@@ -84,7 +103,7 @@ const isValidLetter = (letter: string) => {
       `}`,
       `*`,
       `+`,
-    ].includes(letter.toLowerCase())
+    ].includes(letter)
   ) {
     return true;
   }
