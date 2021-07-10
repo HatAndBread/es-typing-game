@@ -8,7 +8,7 @@ const useTimer = ({
   started: boolean;
   time: number;
   setTime: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+}): void => {
   useEffect(() => {
     const cb = () => setTime(time + 0.1);
     let timeout: any;

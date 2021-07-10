@@ -5,7 +5,8 @@ import { Quiz } from "../Types/JsonTypes";
 const QuizShow = ({ quiz }: { quiz: Quiz }) => {
   const [currentGame, setCurrentGame] = useState<null | string>(null);
   const words = quiz.questions.map((question) => question.word);
-  console.log(quiz, "🎅");
+  const [studentName, setStudentName] = useState<string>("");
+  const [nameSaved, setNameSaved] = useState(false);
   const getGame = () => {
     if (!currentGame) return undefined;
     switch (currentGame) {
@@ -23,8 +24,37 @@ const QuizShow = ({ quiz }: { quiz: Quiz }) => {
         <button onClick={() => setCurrentGame(null)}>Quit</button>
       ) : (
         <div className='flex'>
-          <button onClick={() => setCurrentGame("sound")}>Type By Sound</button>
-          <button onClick={() => setCurrentGame("word")}>Type By Word</button>
+          {!nameSaved ? (
+            <>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (studentName !== "") {
+                    setNameSaved(true);
+                  }
+                }}>
+                <input
+                  type='text'
+                  autoFocus
+                  onChange={(e) => setStudentName(e.target.value)}
+                />
+                <button
+                  onClick={() => studentName !== "" && setNameSaved(true)}>
+                  OK
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              {nameSaved ? studentName : undefined}
+              <button onClick={() => setCurrentGame("sound")}>
+                Type By Sound
+              </button>
+              <button onClick={() => setCurrentGame("word")}>
+                Type By Word
+              </button>
+            </>
+          )}
         </div>
       )}
 
