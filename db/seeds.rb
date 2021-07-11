@@ -11,3 +11,8 @@ end
   question = Question.create({ word: Faker::Creature::Animal.name, quiz: Quiz.all.sample })
   p "New question created: #{question}"
 end
+
+80.times do
+  Player.create({ name: Faker::Name.first_name, quiz: Quiz.all.sample, best_time: (10..30).to_a.sample,
+                  best_mistakes: (0..10).to_a.sample })
+end

@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
   root to: 'pages#home'
 
-  resources :quizzes
+  resources :quizzes do
+    resources :players, only: [:create]
+  end
   get '/teacher/:id', to: 'quizzes#teacher', as: :teacher
+  get '/quiz_results/:id', to: 'quizzes#results', as: :results
   get '/search', to: 'pages#search', as: :search
 end

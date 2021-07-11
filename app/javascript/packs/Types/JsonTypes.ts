@@ -2,6 +2,7 @@ export interface Quiz {
   createdAt: null | string;
   id: null | number;
   questions: Question[];
+  players: Player[];
   title: null | string;
   updatedAt: null | string;
   userId: null | number;
@@ -21,4 +22,14 @@ export interface Question {
   quizId: number;
   updatedAt: string;
   word: string;
+}
+
+export interface Player {
+  id: number;
+  bestMistakes: string;
+  bestTime: string;
+  name: string;
+  quizId: number;
+  createdAt: string;
+  updatedAt: string;
 }

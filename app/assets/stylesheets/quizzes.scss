@@ -51,3 +51,47 @@
     justify-content: space-between;
   }
 }
+.QuizShow {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  form {
+    font-size: large;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.WordGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.time-display {
+  background-color: black;
+  font-family: monospace;
+  font-size: 40px;
+  width: 100%;
+  color: snow;
+  padding: 8px;
+  border-radius: 6px;
+}
+.stats-display {
+  font-family: monospace;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  background-color: black;
+  color: snow;
+  padding: 8px;
+  border-radius: 8px;
+}
+.stats-item {
+  margin: 16px;
+  font-size: x-large;
+}

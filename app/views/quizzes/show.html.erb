@@ -1,1 +1,1 @@
-<%= render(partial: 'shared/react', locals: {data: @quiz.to_json(include: :questions), page: 'show_quiz'}) %>
+<%= render(partial: 'shared/react', locals: {data: @quiz.to_json(include: [:questions, :players]), page: 'show_quiz'}) %>

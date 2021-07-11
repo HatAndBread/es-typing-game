@@ -42,6 +42,10 @@ class QuizzesController < ApplicationController
     @quizzes = Quiz.where(user_id: params[:id])
   end
 
+  def results
+    @quiz = Quiz.find(params[:id])
+  end
+
   private
 
   def set_quiz

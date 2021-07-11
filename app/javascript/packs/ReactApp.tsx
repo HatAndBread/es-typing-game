@@ -2,6 +2,7 @@ import React, { createContext, useContext } from "react";
 import QuizForm from "./Quizzes/QuizForm";
 import QuizzesIndex from "./Quizzes/QuizzesIndex";
 import QuizShow from "./Quizzes/QuizShow";
+import Results from "./Quizzes/Results";
 import { CurrentUser } from "./Types/JsonTypes";
 
 type ContextProps = { currentUser: CurrentUser | null };
@@ -18,7 +19,7 @@ const ReactApp = ({
   page: string;
   currentUser: CurrentUser | null;
   errors: any;
-}) => {
+}): JSX.Element => {
   const globals = { currentUser };
   const getPage = () => {
     switch (page) {
@@ -36,6 +37,9 @@ const ReactApp = ({
       }
       case "show_quiz": {
         return <QuizShow quiz={data} />;
+      }
+      case "results": {
+        return <Results quiz={data} />;
       }
       default:
         return <></>;

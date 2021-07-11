@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { getContext } from "../ReactApp";
 import { Quiz } from "../Types/JsonTypes";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import garbage from "../../../assets/images/garbage.svg";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import pencil from "../../../assets/images/pencil.svg";
 const token: any = document.querySelector('meta[name="csrf-token"]');
@@ -13,7 +15,7 @@ const QuizzesIndex = ({
 }: {
   quizzes: Quiz[];
   edit: boolean;
-}) => {
+}): JSX.Element => {
   console.log(quizzes);
   const currentUser = getContext().currentUser;
   const [quizArr, setQuizArr] = useState(quizzes);
@@ -48,6 +50,13 @@ const QuizzesIndex = ({
           <a href={`/quizzes/${quiz.id}`} className='link-btn'>
             Play
           </a>
+          {edit ? (
+            <a href={`/quiz_results/${quiz.id}`} className='link-btn'>
+              Live Results
+            </a>
+          ) : (
+            ""
+          )}
           {currentUser && edit ? (
             <div className='edit-delete'>
               <a href={`/quizzes/${quiz.id}/edit`}>

@@ -21,7 +21,9 @@ const QuizShow = ({ quiz }: { quiz: Quiz }) => {
   return (
     <div className='QuizShow'>
       {currentGame ? (
-        <button onClick={() => setCurrentGame(null)}>Quit</button>
+        <button title='BACK' onClick={() => setCurrentGame(null)}>
+          ⏪
+        </button>
       ) : (
         <div className='flex'>
           {!nameSaved ? (
@@ -33,11 +35,17 @@ const QuizShow = ({ quiz }: { quiz: Quiz }) => {
                     setNameSaved(true);
                   }
                 }}>
-                <input
-                  type='text'
-                  autoFocus
-                  onChange={(e) => setStudentName(e.target.value)}
-                />
+                <label htmlFor='name-input'>
+                  {" "}
+                  Name:
+                  <input
+                    type='text'
+                    id='name-input'
+                    name='name-input'
+                    autoFocus
+                    onChange={(e) => setStudentName(e.target.value)}
+                  />
+                </label>
                 <button
                   onClick={() => studentName !== "" && setNameSaved(true)}>
                   OK

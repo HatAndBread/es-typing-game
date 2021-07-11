@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Quiz } from "../Types/JsonTypes";
 import useTimer from "../Hooks/useTimer";
 import useLatestKey from "../Hooks/useLatestKey";
-
+import { useVoices } from "../Hooks/useVoices";
 let lastNumberOfMistakes = 0;
 const TypeByWord = ({
   quiz,
@@ -21,23 +21,7 @@ const TypeByWord = ({
   const [utterance, setUtterance] = useState<null | SpeechSynthesisUtterance>(
     null
   );
-  useEffect(() => {
-    const getEnglishVoice = (arr: SpeechSynthesisVoice[]) => {
-      const firstVoice = arr.find((voice) => voice.lang.includes("en-US"));
-      if (firstVoice) {
-        setVoice(firstVoice);
-      }
-    };
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (speechSynthesis.addEventListener) {
-      speechSynthesis.addEventListener("voiceschanged", () => {
-        getEnglishVoice(speechSynthesis.getVoices());
-      });
-    } else {
-      getEnglishVoice(speechSynthesis.getVoices());
-    }
-  }, []);
+  const btnRef = useRef<null | HTMLButtonElement>(null);
   const reset = () => {
     lastNumberOfMistakes = 0;
     setTime(0);
@@ -45,6 +29,7 @@ const TypeByWord = ({
     setNumberOfMistakes(0);
     setStarted(true);
   };
+  useVoices(setVoice);
   useTimer({ started, time, setTime });
   useLatestKey(
     currentWord,
@@ -97,18 +82,25 @@ const TypeByWord = ({
   }, [started, bestTime, setBestTime, time]);
   return (
     <div className='WordGame'>
-      {time.toFixed(1)}
+      <div className='stats-display'>
+        <div className='stats-item'>
+          BEST TIME: {bestTime ? bestTime.toLocaleString() : "--"}
+        </div>
+        <div className='stats-item'>MISTAKES: {numberOfMistakes}</div>
+      </div>
+
+      {started && <div className='time-display'>{time.toFixed(1)}</div>}
       <button
+        ref={btnRef}
         className='start-btn'
         onClick={() => {
+          if (btnRef.current) {
+            btnRef.current.blur();
+          }
           bestTime ? reset() : setStarted(true);
         }}>
         {bestTime ? "TRY AGAIN" : "START"}
       </button>
-      <div className=''>
-        Best time: {bestTime ? bestTime.toLocaleString() : "--"}
-      </div>
-      <div className=''>Number of mistakes: {numberOfMistakes}</div>
       {started && <div style={{ fontSize: "50px" }}>{currentWord}</div>}
     </div>
   );
