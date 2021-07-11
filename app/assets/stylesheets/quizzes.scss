@@ -95,3 +95,9 @@
   margin: 16px;
   font-size: x-large;
 }
+.Results {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

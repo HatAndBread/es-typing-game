@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Quiz } from "../Types/JsonTypes";
+import ProgressChart from "./ProgressChart";
+import { Quiz, Player } from "../Types/JsonTypes";
 import useTimer from "../Hooks/useTimer";
 import useLatestKey from "../Hooks/useLatestKey";
 import { useVoices } from "../Hooks/useVoices";
+import { saveBestTime } from "../saveBestTime";
 let lastNumberOfMistakes = 0;
+
 const TypeByWord = ({
   quiz,
   words,
+  player,
+  setPlayer,
 }: {
   quiz: Quiz;
   words: string[];
+  player: Player | null;
+  setPlayer: React.Dispatch<React.SetStateAction<Player | null>>;
 }): JSX.Element => {
   const [started, setStarted] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -17,6 +24,7 @@ const TypeByWord = ({
   const [bestTime, setBestTime] = useState<null | number>(null);
   const [numberOfMistakes, setNumberOfMistakes] = useState(0);
   const [time, setTime] = useState(0);
+  const [times, setTimes] = useState<number[]>([]);
   const [voice, setVoice] = useState<null | SpeechSynthesisVoice>(null);
   const [utterance, setUtterance] = useState<null | SpeechSynthesisUtterance>(
     null
@@ -53,6 +61,7 @@ const TypeByWord = ({
       setTime(time + 1);
     }
   }, [numberOfMistakes, time]);
+
   useEffect(() => {
     if (started && currentWord === "" && currentWordIndex < words.length - 1) {
       setCurrentWord(".");
@@ -63,6 +72,9 @@ const TypeByWord = ({
       currentWord === "" &&
       currentWordIndex === words.length - 1
     ) {
+      const oldTimes = [...times];
+      oldTimes.push(time);
+      setTimes(oldTimes);
       setStarted(false);
       setUtterance(null);
     }
@@ -78,6 +90,9 @@ const TypeByWord = ({
   useEffect(() => {
     if (!started && (!bestTime || bestTime > time) && time !== 0) {
       setBestTime(time);
+      if (quiz.id && player) {
+        saveBestTime(quiz.id, player.name, time, setPlayer);
+      }
     }
   }, [started, bestTime, setBestTime, time]);
   return (
@@ -89,7 +104,7 @@ const TypeByWord = ({
         <div className='stats-item'>MISTAKES: {numberOfMistakes}</div>
       </div>
 
-      {started && <div className='time-display'>{time.toFixed(1)}</div>}
+      {<div className='time-display'>{time.toFixed(1)}</div>}
       <button
         ref={btnRef}
         className='start-btn'
@@ -102,6 +117,9 @@ const TypeByWord = ({
         {bestTime ? "TRY AGAIN" : "START"}
       </button>
       {started && <div style={{ fontSize: "50px" }}>{currentWord}</div>}
+      <div className='canvas-container'>
+        <ProgressChart times={times} />
+      </div>
     </div>
   );
 };

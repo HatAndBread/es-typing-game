@@ -42,8 +42,25 @@ class QuizzesController < ApplicationController
     @quizzes = Quiz.where(user_id: params[:id])
   end
 
-  def results
-    @quiz = Quiz.find(params[:id])
+  def results; end
+
+  def current_status
+    render json: @quiz.to_json(include: %i[questions players])
+  end
+
+  def reset_quiz
+    @quiz.players.destroy_all
+  end
+
+  def update_best
+    @player = Player.where('name = ? AND quiz_id = ?', params[:name], params[:id]).first
+    if @player
+      @player.best_time = params[:best_time]
+      @player.save
+    else
+      @player = Player.create!({ name: params[:name], quiz_id: params[:id], best_time: params[:best_time] })
+    end
+    render json: @player.to_json
   end
 
   private

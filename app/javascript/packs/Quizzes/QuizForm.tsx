@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AuthenticityToken from "../AuthenticityToken";
 import { Quiz } from "../Types/JsonTypes";
 import { getContext } from "../ReactApp";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import garbage from "../../../assets/images/garbage.svg";
 
@@ -13,7 +14,7 @@ const NewQuiz = ({
   edit: boolean;
   quiz: Quiz;
   errors: any;
-}) => {
+}): JSX.Element => {
   const [acknowledgedErrors, setAcknowledgedErrors] = useState(
     errors ? false : true
   );

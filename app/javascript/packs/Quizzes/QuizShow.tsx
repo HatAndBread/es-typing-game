@@ -1,19 +1,45 @@
 import React, { useState } from "react";
 import TypeBySound from "../Games/TypeBySound";
 import TypeByWord from "../Games/TypeByWord";
-import { Quiz } from "../Types/JsonTypes";
-const QuizShow = ({ quiz }: { quiz: Quiz }) => {
+import { Quiz, Player } from "../Types/JsonTypes";
+import { getRequestObject } from "../getRequestObject";
+import { camel } from "../camel";
+
+const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
   const [currentGame, setCurrentGame] = useState<null | string>(null);
   const words = quiz.questions.map((question) => question.word);
   const [studentName, setStudentName] = useState<string>("");
   const [nameSaved, setNameSaved] = useState(false);
+  const [player, setPlayer] = useState<null | Player>(null);
+  const savePlayer = async () => {
+    const res = await fetch(
+      `/quizzes/${quiz.id}/players`,
+      getRequestObject("POST", { name: studentName })
+    );
+    const data = await res.json();
+    if (data.error) {
+      alert(`You can't use that name 😿`);
+      return false;
+    } else {
+      const camelized: Player = camel(data);
+      setPlayer(camelized);
+      return true;
+    }
+  };
   const getGame = () => {
     if (!currentGame) return undefined;
     switch (currentGame) {
       case "sound":
         return <TypeBySound quiz={quiz} words={words} />;
       case "word":
-        return <TypeByWord quiz={quiz} words={words} />;
+        return (
+          <TypeByWord
+            quiz={quiz}
+            words={words}
+            player={player}
+            setPlayer={setPlayer}
+          />
+        );
       default:
         return undefined;
     }
@@ -29,9 +55,9 @@ const QuizShow = ({ quiz }: { quiz: Quiz }) => {
           {!nameSaved ? (
             <>
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  if (studentName !== "") {
+                  if (studentName !== "" && (await savePlayer())) {
                     setNameSaved(true);
                   }
                 }}>
@@ -46,10 +72,7 @@ const QuizShow = ({ quiz }: { quiz: Quiz }) => {
                     onChange={(e) => setStudentName(e.target.value)}
                   />
                 </label>
-                <button
-                  onClick={() => studentName !== "" && setNameSaved(true)}>
-                  OK
-                </button>
+                <button type='submit'>OK</button>
               </form>
             </>
           ) : (

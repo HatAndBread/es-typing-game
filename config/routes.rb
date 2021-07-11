@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   root to: 'pages#home'
 
   resources :quizzes do
-    resources :players, only: [:create]
+    member do
+      get :current_status
+      get :reset_quiz
+      post :update_best
+    end
+    resources :players, only: %i[create]
   end
   get '/teacher/:id', to: 'quizzes#teacher', as: :teacher
   get '/quiz_results/:id', to: 'quizzes#results', as: :results
