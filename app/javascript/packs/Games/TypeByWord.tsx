@@ -5,6 +5,7 @@ import useTimer from "../Hooks/useTimer";
 import useLatestKey from "../Hooks/useLatestKey";
 import { useVoices } from "../Hooks/useVoices";
 import { saveBestTime } from "../saveBestTime";
+import { randomizeArr } from "../randomizeArr";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import buzzPath from "../../../assets/audios/buzz.mp3";
@@ -26,6 +27,7 @@ const TypeByWord = ({
   setCurrentGame: React.Dispatch<React.SetStateAction<string | null>>;
 }): JSX.Element => {
   const [started, setStarted] = useState(false);
+  const [randomizedWords, setRanomizedWords] = useState(words);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentWord, setCurrentWord] = useState(words[currentWordIndex]);
   const [bestTime, setBestTime] = useState<null | number>(null);
@@ -67,9 +69,11 @@ const TypeByWord = ({
     }
   }, [utterance, started]);
   useEffect(() => {
-    setCurrentWord(words[currentWordIndex]);
-    setUtterance(new SpeechSynthesisUtterance(words[currentWordIndex]));
-  }, [currentWordIndex, setCurrentWord, words]);
+    setCurrentWord(randomizedWords[currentWordIndex]);
+    setUtterance(
+      new SpeechSynthesisUtterance(randomizedWords[currentWordIndex])
+    );
+  }, [currentWordIndex, setCurrentWord, randomizedWords]);
   useEffect(() => {
     if (numberOfMistakes > 0 && numberOfMistakes !== lastNumberOfMistakes) {
       lastNumberOfMistakes += 1;
@@ -84,7 +88,11 @@ const TypeByWord = ({
   }, []);
 
   useEffect(() => {
-    if (started && currentWord === "" && currentWordIndex < words.length - 1) {
+    if (
+      started &&
+      currentWord === "" &&
+      currentWordIndex < randomizedWords.length - 1
+    ) {
       const r = () => {
         setCurrentWord(".");
         setCurrentWordIndex(currentWordIndex + 1);
@@ -98,7 +106,7 @@ const TypeByWord = ({
     } else if (
       started &&
       currentWord === "" &&
-      currentWordIndex === words.length - 1
+      currentWordIndex === randomizedWords.length - 1
     ) {
       setCurrentWordIndex(0);
       setUtterance(null);
@@ -113,7 +121,7 @@ const TypeByWord = ({
     setStarted,
     currentWordIndex,
     setCurrentWordIndex,
-    words,
+    randomizedWords,
   ]);
   const speak = () => {
     if (utterance && started) {
@@ -130,15 +138,21 @@ const TypeByWord = ({
       }
     }
   }, [started, bestTime, setBestTime, time]);
+
+  useEffect(() => {
+    if (!started) {
+      setRanomizedWords(randomizeArr(words));
+    }
+  }, [started, setRanomizedWords, words]);
   return (
     <div className='WordGame'>
-      <button
-        title='BACK'
-        onClick={() => setCurrentGame(null)}
-        className='back-btn'>
-        ⏪
-      </button>
       <div className='stats-display'>
+        <button
+          title='BACK'
+          onClick={() => setCurrentGame(null)}
+          className='back-btn'>
+          ⏪
+        </button>
         <div className='stats-item'>
           BEST TIME⏰: {bestTime ? bestTime.toLocaleString() : "--"}
         </div>
@@ -167,9 +181,9 @@ const TypeByWord = ({
 
       <div style={{ fontSize: "50px" }}>
         {listening && started
-          ? words[currentWordIndex].substring(
+          ? randomizedWords[currentWordIndex].substring(
               0,
-              words[currentWordIndex].length - currentWord.length
+              randomizedWords[currentWordIndex].length - currentWord.length
             )
           : ""}
         {!listening && started ? currentWord : ""}
@@ -181,4 +195,5 @@ const TypeByWord = ({
     </div>
   );
 };
+
 export default TypeByWord;

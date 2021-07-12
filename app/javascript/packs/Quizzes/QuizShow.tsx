@@ -3,6 +3,7 @@ import TypeByWord from "../Games/TypeByWord";
 import { Quiz, Player } from "../Types/JsonTypes";
 import { getRequestObject } from "../getRequestObject";
 import { camel } from "../camel";
+import { randomizeArr } from "../randomizeArr";
 
 const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
   const [currentGame, setCurrentGame] = useState<null | string>(null);
@@ -32,7 +33,7 @@ const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
         return (
           <TypeByWord
             quiz={quiz}
-            words={words}
+            words={randomizeArr(words)}
             player={player}
             setPlayer={setPlayer}
             listening={true}
@@ -43,7 +44,7 @@ const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
         return (
           <TypeByWord
             quiz={quiz}
-            words={words}
+            words={randomizeArr(words)}
             player={player}
             setPlayer={setPlayer}
             setCurrentGame={setCurrentGame}

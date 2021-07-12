@@ -86,10 +86,12 @@
   display: flex;
   width: 100%;
   justify-content: center;
+  align-items: center;
   background-color: black;
   color: snow;
   padding: 8px;
   border-radius: 8px;
+  flex-direction: column;
 }
 .stats-item {
   margin: 16px;
