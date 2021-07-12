@@ -1,24 +1,13 @@
-# README
+# Typing Teacher
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A game I made for teaching elemenatry school students typing.
 
-Things you may want to cover:
+See it <a href="https://abcd4321.herokuapp.com/">here</a>.
 
-* Ruby version
+# Tech:
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+<ul>
+<li>⭐️Rails</li>
+<li>⭐️React</li>
+<li>⭐️TypeScript</li>
+</ul>
