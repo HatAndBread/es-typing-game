@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     end
     resources :players, only: %i[create]
   end
+  delete '/player/:id', to: 'players#destroy', as: :player
   get '/teacher/:id', to: 'quizzes#teacher', as: :teacher
   get '/quiz_results/:id', to: 'quizzes#results', as: :results
   get '/search', to: 'pages#search', as: :search

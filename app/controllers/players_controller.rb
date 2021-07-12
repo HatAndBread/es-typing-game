@@ -9,7 +9,17 @@ class PlayersController < ApplicationController
     end
   end
 
+  def destroy
+    @player = Player.find(params[:id])
+    @player.destroy!
+    render json: { message: 'ok' }.to_json
+  end
+
   private
+
+  def set_player
+    @player = Player.new(player_params)
+  end
 
   def player_params
     params.require(:player).permit(:name, :best_time, :best_mistakes, :quiz_id)

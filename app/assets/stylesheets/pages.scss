@@ -69,3 +69,10 @@ a:hover {
     align-items: center;
   }
 }
+.trash {
+  opacity: 0;
+  transition: 0.3s;
+}
+.trash:hover {
+  opacity: 1;
+}

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Quiz } from "../Types/JsonTypes";
 import { camel } from "../camel";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+import garbagePath from "../../../assets/images/garbage.svg";
+import { getRequestObject } from "../getRequestObject";
 const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
   const [currentQuiz, setCurrentQuiz] = useState(quiz);
   const [numberToShow, setNumberToShow] = useState(3);
@@ -24,6 +28,21 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
     if (num === 1) return "🥈";
     if (num === 2) return "🥉";
     return "⭐️";
+  };
+  const takeOutTrash = async (id: number) => {
+    console.log(id);
+    const res = await fetch(`/player/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        "X-CSRF-Token": document.getElementsByName("csrf-token")[0].content,
+      },
+    });
+    const data = await res.json();
+    console.log(data);
   };
 
   return (
@@ -49,6 +68,12 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
             <div>
               {getPoint(index)}
               {player.name}: {player.bestTime}
+              <img
+                src={garbagePath}
+                alt='Delete'
+                onClick={() => takeOutTrash(player.id)}
+                width='30'
+                className='pointer trash'></img>
             </div>
           ) : (
             ""
