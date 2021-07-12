@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import TypeBySound from "../Games/TypeBySound";
 import TypeByWord from "../Games/TypeByWord";
 import { Quiz, Player } from "../Types/JsonTypes";
 import { getRequestObject } from "../getRequestObject";
@@ -30,7 +29,16 @@ const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
     if (!currentGame) return undefined;
     switch (currentGame) {
       case "sound":
-        return <TypeBySound quiz={quiz} words={words} />;
+        return (
+          <TypeByWord
+            quiz={quiz}
+            words={words}
+            player={player}
+            setPlayer={setPlayer}
+            listening={true}
+            setCurrentGame={setCurrentGame}
+          />
+        );
       case "word":
         return (
           <TypeByWord
@@ -38,6 +46,7 @@ const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
             words={words}
             player={player}
             setPlayer={setPlayer}
+            setCurrentGame={setCurrentGame}
           />
         );
       default:
@@ -47,11 +56,9 @@ const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
   return (
     <div className='QuizShow'>
       {currentGame ? (
-        <button title='BACK' onClick={() => setCurrentGame(null)}>
-          ⏪
-        </button>
+        ""
       ) : (
-        <div className='flex'>
+        <div className='flex column ac jc'>
           {!nameSaved ? (
             <>
               <form
@@ -61,28 +68,30 @@ const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
                     setNameSaved(true);
                   }
                 }}>
-                <label htmlFor='name-input'>
-                  {" "}
-                  Name:
-                  <input
-                    type='text'
-                    id='name-input'
-                    name='name-input'
-                    autoFocus
-                    onChange={(e) => setStudentName(e.target.value)}
-                  />
-                </label>
+                <h1>What&apos;s your name?</h1>
+                <input
+                  type='text'
+                  id='name-input'
+                  name='name-input'
+                  autoFocus
+                  onChange={(e) => setStudentName(e.target.value)}
+                />
                 <button type='submit'>OK</button>
               </form>
             </>
           ) : (
             <>
-              {nameSaved ? studentName : undefined}
-              <button onClick={() => setCurrentGame("sound")}>
-                Type By Sound
+              <div className='greeting'>
+                Hello, {nameSaved ? studentName : "friend"}!
+              </div>
+
+              <button onClick={() => setCurrentGame("word")} className='xlfont'>
+                READING 👀
               </button>
-              <button onClick={() => setCurrentGame("word")}>
-                Type By Word
+              <button
+                onClick={() => setCurrentGame("sound")}
+                className='xlfont'>
+                LISTENING 👂
               </button>
             </>
           )}

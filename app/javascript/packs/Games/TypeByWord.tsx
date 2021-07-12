@@ -5,6 +5,9 @@ import useTimer from "../Hooks/useTimer";
 import useLatestKey from "../Hooks/useLatestKey";
 import { useVoices } from "../Hooks/useVoices";
 import { saveBestTime } from "../saveBestTime";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
+import buzzPath from "../../../assets/audios/buzz.mp3";
 let lastNumberOfMistakes = 0;
 
 const TypeByWord = ({
@@ -12,11 +15,15 @@ const TypeByWord = ({
   words,
   player,
   setPlayer,
+  listening,
+  setCurrentGame,
 }: {
   quiz: Quiz;
   words: string[];
   player: Player | null;
   setPlayer: React.Dispatch<React.SetStateAction<Player | null>>;
+  listening?: boolean;
+  setCurrentGame: React.Dispatch<React.SetStateAction<string | null>>;
 }): JSX.Element => {
   const [started, setStarted] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -29,6 +36,12 @@ const TypeByWord = ({
   const [utterance, setUtterance] = useState<null | SpeechSynthesisUtterance>(
     null
   );
+  const [buzzSound, setBuzzSound] = useState<null | HTMLAudioElement>(null);
+  useEffect(() => {
+    if (!buzzSound) {
+      setBuzzSound(new Audio(buzzPath));
+    }
+  }, [buzzSound, setBuzzSound]);
   const btnRef = useRef<null | HTMLButtonElement>(null);
   const reset = () => {
     lastNumberOfMistakes = 0;
@@ -37,13 +50,15 @@ const TypeByWord = ({
     setNumberOfMistakes(0);
     setStarted(true);
   };
-  useVoices(setVoice);
+  useVoices(setVoice, quiz);
   useTimer({ started, time, setTime });
   useLatestKey(
     currentWord,
     setCurrentWord,
     numberOfMistakes,
-    setNumberOfMistakes
+    setNumberOfMistakes,
+    started,
+    buzzSound
   );
   useEffect(() => {
     if (utterance && started) {
@@ -63,20 +78,34 @@ const TypeByWord = ({
   }, [numberOfMistakes, time]);
 
   useEffect(() => {
+    return () => {
+      lastNumberOfMistakes = 0;
+    };
+  }, []);
+
+  useEffect(() => {
     if (started && currentWord === "" && currentWordIndex < words.length - 1) {
-      setCurrentWord(".");
-      setCurrentWordIndex(currentWordIndex + 1);
-      setUtterance(null);
+      const r = () => {
+        setCurrentWord(".");
+        setCurrentWordIndex(currentWordIndex + 1);
+        setUtterance(null);
+      };
+      if (listening) {
+        setTimeout(r, 500);
+      } else {
+        r();
+      }
     } else if (
       started &&
       currentWord === "" &&
       currentWordIndex === words.length - 1
     ) {
+      setCurrentWordIndex(0);
+      setUtterance(null);
       const oldTimes = [...times];
       oldTimes.push(time);
       setTimes(oldTimes);
       setStarted(false);
-      setUtterance(null);
     }
   }, [
     currentWord,
@@ -86,6 +115,12 @@ const TypeByWord = ({
     setCurrentWordIndex,
     words,
   ]);
+  const speak = () => {
+    if (utterance && started) {
+      if (voice) utterance.voice = voice;
+      speechSynthesis.speak(utterance);
+    }
+  };
 
   useEffect(() => {
     if (!started && (!bestTime || bestTime > time) && time !== 0) {
@@ -97,14 +132,27 @@ const TypeByWord = ({
   }, [started, bestTime, setBestTime, time]);
   return (
     <div className='WordGame'>
+      <button
+        title='BACK'
+        onClick={() => setCurrentGame(null)}
+        className='back-btn'>
+        ⏪
+      </button>
       <div className='stats-display'>
         <div className='stats-item'>
-          BEST TIME: {bestTime ? bestTime.toLocaleString() : "--"}
+          BEST TIME⏰: {bestTime ? bestTime.toLocaleString() : "--"}
         </div>
-        <div className='stats-item'>MISTAKES: {numberOfMistakes}</div>
+        <div className='stats-item'>MISTAKES😱: {numberOfMistakes}</div>
       </div>
 
       {<div className='time-display'>{time.toFixed(1)}</div>}
+      {listening ? (
+        <button onClick={speak} className='speak-btn'>
+          🗣
+        </button>
+      ) : (
+        ""
+      )}
       <button
         ref={btnRef}
         className='start-btn'
@@ -116,7 +164,17 @@ const TypeByWord = ({
         }}>
         {bestTime ? "TRY AGAIN" : "START"}
       </button>
-      {started && <div style={{ fontSize: "50px" }}>{currentWord}</div>}
+
+      <div style={{ fontSize: "50px" }}>
+        {listening && started
+          ? words[currentWordIndex].substring(
+              0,
+              words[currentWordIndex].length - currentWord.length
+            )
+          : ""}
+        {!listening && started ? currentWord : ""}
+      </div>
+
       <div className='canvas-container'>
         <ProgressChart times={times} />
       </div>

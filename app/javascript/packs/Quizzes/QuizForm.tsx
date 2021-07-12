@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AuthenticityToken from "../AuthenticityToken";
 import { Quiz } from "../Types/JsonTypes";
-import { getContext } from "../ReactApp";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import garbage from "../../../assets/images/garbage.svg";
@@ -18,7 +17,7 @@ const NewQuiz = ({
   const [acknowledgedErrors, setAcknowledgedErrors] = useState(
     errors ? false : true
   );
-  const currentUser = getContext().currentUser;
+
   useEffect(() => {
     if (errors && !acknowledgedErrors) {
       alert("That quiz name has already been used. Please choose a new one.");
@@ -38,13 +37,9 @@ const NewQuiz = ({
   const takeOutTrash = (index: number) => {
     const newWords = words.map((word) => word);
     newWords.splice(index, 1);
-    console.log(newWords, "sa");
     setWords(newWords);
   };
-  useEffect(() => {
-    console.log(words, "🤓");
-  }, [words]);
-  console.log(quiz);
+
   return (
     <div className='QuizForm'>
       <form
@@ -66,6 +61,10 @@ const NewQuiz = ({
           defaultValue={quiz.title ? quiz.title : ""}
           autoFocus
         />
+        <select id='quiz_language' name='[quiz]language'>
+          <option value='English'>English</option>
+          <option value='Japanese'>Japanese</option>
+        </select>
         <label>Words</label>
         {words.map((word, index) => (
           <div className='input-and-garbage' key={index}>

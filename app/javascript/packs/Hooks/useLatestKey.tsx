@@ -4,27 +4,34 @@ const useLatestKey = (
   currentWord: string,
   setCurrentWord: React.Dispatch<React.SetStateAction<string>>,
   numberOfMistakes: number,
-  setNumberOfMistakes: React.Dispatch<React.SetStateAction<number>>
+  setNumberOfMistakes: React.Dispatch<React.SetStateAction<number>>,
+  started: boolean,
+  buzzSound: HTMLAudioElement | null
 ): string => {
   const [latestKey, setLatestKey] = useState("");
   const cw = currentWord.toLowerCase();
+  let handleKeydown: undefined | ((e: KeyboardEvent) => void);
   useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      const key = e.key.toLowerCase();
-      if (isValidLetter(key)) {
-        setLatestKey(key);
-        if (cw[0] === key) {
-          setCurrentWord(cw.substring(1, cw.length));
-        } else {
-          setNumberOfMistakes(numberOfMistakes + 1);
+    if (started) {
+      handleKeydown = (e: KeyboardEvent) => {
+        const key = e.key.toLowerCase();
+        if (isValidLetter(key)) {
+          setLatestKey(key);
+          if (cw[0] === key) {
+            setCurrentWord(cw.substring(1, cw.length));
+          } else {
+            buzzSound && buzzSound.play();
+            setNumberOfMistakes(numberOfMistakes + 1);
+          }
         }
-      }
-    };
-    window.addEventListener("keydown", handleKeydown);
-
+      };
+      window.addEventListener("keydown", handleKeydown);
+    }
     return () => {
       setLatestKey("");
-      window.removeEventListener("keydown", handleKeydown);
+      if (handleKeydown) {
+        window.removeEventListener("keydown", handleKeydown);
+      }
     };
   }, [
     setLatestKey,
@@ -32,6 +39,7 @@ const useLatestKey = (
     currentWord,
     numberOfMistakes,
     setNumberOfMistakes,
+    started,
   ]);
 
   return latestKey;

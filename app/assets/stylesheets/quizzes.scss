@@ -94,10 +94,27 @@
 .stats-item {
   margin: 16px;
   font-size: x-large;
+  text-decoration: underline;
 }
 .Results {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.back-btn {
+  font-size: xx-large;
+}
+.greeting {
+  font-weight: bold;
+  font-size: x-large;
+}
+.player-stats {
+  font-size: xx-large;
+}
+.speak-btn {
+  font-size: xx-large;
+}
+.xlfont {
+  font-size: xx-large;
 }

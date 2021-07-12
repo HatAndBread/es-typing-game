@@ -23,6 +23,7 @@ default: &default
     - .jpeg
     - .png
     - .gif
+    - .mp3
     - .tiff
     - .ico
     - .svg
@@ -45,6 +46,7 @@ default: &default
     - .module.scss
     - .module.css
     - .png
+    - .mp3
     - .svg
     - .gif
     - .jpeg
@@ -70,10 +72,9 @@ development:
     quiet: false
     pretty: false
     headers:
-      'Access-Control-Allow-Origin': '*'
+      "Access-Control-Allow-Origin": "*"
     watch_options:
-      ignored: '**/node_modules/**'
-
+      ignored: "**/node_modules/**"
 
 test:
   <<: *default

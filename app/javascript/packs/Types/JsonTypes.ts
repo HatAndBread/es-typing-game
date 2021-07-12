@@ -5,6 +5,7 @@ export interface Quiz {
   players: Player[];
   title: null | string;
   updatedAt: null | string;
+  language: "Japanese" | "English";
   userId: null | number;
 }
 

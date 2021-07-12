@@ -19,6 +19,12 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
     setInterval(updateQuizStatus, 3000);
   }, []);
   const resetScores = () => fetch(`/quizzes/${quiz.id}/reset_quiz`);
+  const getPoint = (num: number) => {
+    if (num === 0) return "🏆";
+    if (num === 1) return "🥈";
+    if (num === 2) return "🥉";
+    return "⭐️";
+  };
 
   return (
     <div className='Results'>
@@ -41,6 +47,7 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
         <div key={index} className='player-stats'>
           {index < numberToShow ? (
             <div>
+              {getPoint(index)}
               {player.name}: {player.bestTime}
             </div>
           ) : (

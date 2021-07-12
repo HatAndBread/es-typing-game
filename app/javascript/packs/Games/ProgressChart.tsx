@@ -3,7 +3,6 @@ import { Chart, ChartConfiguration, registerables } from "chart.js";
 
 const ProgressChart = ({ times }: { times: number[] }): JSX.Element => {
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
-  const [ctx, setCtx] = useState<null | CanvasRenderingContext2D>(null);
   const [chart, setChart] = useState<null | Chart>(null);
   useEffect(() => {
     if (canvasRef.current && !chart) {
@@ -15,6 +14,7 @@ const ProgressChart = ({ times }: { times: number[] }): JSX.Element => {
             backgroundColor: "rgb(255, 99, 132)",
             borderColor: "rgb(255, 99, 132)",
             data: times,
+            lineTension: 0.4,
           },
         ],
       };

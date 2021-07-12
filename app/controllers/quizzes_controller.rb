@@ -3,7 +3,7 @@ class QuizzesController < ApplicationController
   before_action :authenticate_user!, only: %i[new edit index]
 
   def index
-    @quizzes = current_user.quizzes.all
+    @quizzes = current_user.quizzes.all.order(created_at: :desc)
   end
 
   def show; end
@@ -39,7 +39,7 @@ class QuizzesController < ApplicationController
   end
 
   def teacher
-    @quizzes = Quiz.where(user_id: params[:id])
+    @quizzes = Quiz.where(user_id: params[:id]).order(created_at: :desc)
   end
 
   def results; end
@@ -70,7 +70,7 @@ class QuizzesController < ApplicationController
   end
 
   def quiz_params
-    params.require(:quiz).permit(:title, :user)
+    params.require(:quiz).permit(:title, :user, :language)
   end
 
   def save_questions

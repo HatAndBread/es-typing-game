@@ -9,7 +9,11 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
-    <%= render partial: 'shared/nav'  %>
+    <% if defined?(@quiz) && @quiz[:id] %>
+      <%= render partial: 'shared/nav' unless current_page?(quiz_path(@quiz))%>
+    <% else %>
+      <%= render partial: 'shared/nav' %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
