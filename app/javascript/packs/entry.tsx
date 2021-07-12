@@ -6,7 +6,6 @@ import { camel } from "./camel";
 const root = document.getElementById("root");
 document.addEventListener("DOMContentLoaded", () => {
   if (root?.dataset.page) {
-    console.log(root.dataset);
     ReactDOM.render(
       <ReactApp
         data={

@@ -16,13 +16,11 @@ const QuizzesIndex = ({
   quizzes: Quiz[];
   edit: boolean;
 }): JSX.Element => {
-  console.log(quizzes);
   const currentUser = getContext().currentUser;
   const [quizArr, setQuizArr] = useState(quizzes);
 
   const removeQuiz = (id: number) => {
     const newArr = quizArr.filter((quiz) => quiz.id !== id);
-    console.log(newArr, "🌍", id);
     setQuizArr(newArr);
   };
   const destroy = async (id: number) => {
@@ -36,7 +34,6 @@ const QuizzesIndex = ({
         },
       });
       const data = await res.json();
-      console.log(data);
       if (data.message === "ok") removeQuiz(id);
     } catch (err) {
       alert(err);

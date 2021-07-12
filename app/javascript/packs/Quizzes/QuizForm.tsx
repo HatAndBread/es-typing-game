@@ -78,7 +78,6 @@ const NewQuiz = ({
               onChange={(e) => {
                 const newArr = words.map((word) => word);
                 newArr[index] = e.currentTarget.value;
-                console.log(newArr);
                 setWords(newArr);
               }}
               value={words[index]}

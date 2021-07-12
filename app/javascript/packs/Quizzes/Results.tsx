@@ -16,7 +16,6 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
     const data = await res.json();
     const camelized: Quiz = camel(data);
     orderByPoints(camelized);
-    console.log(camelized);
     setCurrentQuiz(camelized);
   };
   useEffect(() => {
@@ -30,8 +29,7 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
     return "⭐️";
   };
   const takeOutTrash = async (id: number) => {
-    console.log(id);
-    const res = await fetch(`/player/${id}`, {
+    await fetch(`/player/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -41,8 +39,6 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
         "X-CSRF-Token": document.getElementsByName("csrf-token")[0].content,
       },
     });
-    const data = await res.json();
-    console.log(data);
   };
 
   return (
