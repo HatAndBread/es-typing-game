@@ -28,7 +28,7 @@ class QuizzesController < ApplicationController
   def update
     if @quiz.update!(quiz_params)
       save_questions
-      redirect_to quiz_path(@quiz)
+      redirect_to quizzes_path
     else
       puts 'failed to save'
     end

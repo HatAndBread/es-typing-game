@@ -61,7 +61,10 @@ const NewQuiz = ({
           defaultValue={quiz.title ? quiz.title : ""}
           autoFocus
         />
-        <select id='quiz_language' name='[quiz]language'>
+        <select
+          id='quiz_language'
+          name='[quiz]language'
+          defaultValue={quiz.language ? quiz.language : "English"}>
           <option value='English'>English</option>
           <option value='Japanese'>Japanese</option>
         </select>
