@@ -1,5 +1,5 @@
 <div class="home">
-  <h1>Typing Teacher's Treasure Trove</h1>
+  <h1>Nitobe Typing Teacher</h1>
   <%= image_tag 'keyboard.svg', alt: 'keyboard.svg', width: '250' %>
   <% if local_assigns[:errors] %>
     <%= errors %>
@@ -9,4 +9,5 @@
     <%= search_field_tag :search, params[:search], placeholder: "Teacher's name", class: "", autofocus: true %>
     <%= button_tag "Search", :class => '',:name => nil%>
   <% end %>
+  <h3 style="margin-top: 80px;">©2021 by Nitobe Elementary School Software Co.</h3>
 </div>
