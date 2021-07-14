@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TypeByWord from "../Games/TypeByWord";
 import { Quiz, Player } from "../Types/JsonTypes";
 import { getRequestObject } from "../getRequestObject";
@@ -11,6 +11,25 @@ const QuizShow = ({ quiz }: { quiz: Quiz }): JSX.Element => {
   const [studentName, setStudentName] = useState<string>("");
   const [nameSaved, setNameSaved] = useState(false);
   const [player, setPlayer] = useState<null | Player>(null);
+  useEffect(() => {
+    async function unloadHandler(e: BeforeUnloadEvent) {
+      if (player) {
+        await fetch(`/player/${player.id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            "X-CSRF-Token": document.getElementsByName("csrf-token")[0].content,
+          },
+        });
+      }
+    }
+    window.addEventListener("beforeunload", unloadHandler);
+
+    return () => window.removeEventListener("beforeunload", unloadHandler);
+  }, [player]);
   const savePlayer = async () => {
     const res = await fetch(
       `/quizzes/${quiz.id}/players`,

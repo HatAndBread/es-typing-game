@@ -4,21 +4,28 @@ import { camel } from "../camel";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import garbagePath from "../../../assets/images/garbage.svg";
-import { getRequestObject } from "../getRequestObject";
+
 const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
   const [currentQuiz, setCurrentQuiz] = useState(quiz);
-  const [numberToShow, setNumberToShow] = useState(3);
+  const [numberToShow, setNumberToShow] = useState(quiz.players.length);
   const orderByPoints = (arr: Quiz) => {
-    arr.players.sort((a, b) => parseFloat(a.bestTime) - parseFloat(b.bestTime));
+    const filtered = arr.players.filter((i) => i.bestTime !== null);
+    const sorted = filtered.sort(
+      (a, b) => parseFloat(a.bestTime) - parseFloat(b.bestTime)
+    );
+    arr.players = sorted;
+    return arr;
   };
   const updateQuizStatus = async () => {
     const res = await fetch(`/quizzes/${quiz.id}/current_status`);
     const data = await res.json();
     const camelized: Quiz = camel(data);
-    orderByPoints(camelized);
-    setCurrentQuiz(camelized);
+    const orderedQuiz = orderByPoints(camelized);
+    setCurrentQuiz(orderedQuiz);
+    setNumberToShow(quiz.players.length);
   };
   useEffect(() => {
+    updateQuizStatus();
     setInterval(updateQuizStatus, 3000);
   }, []);
   const resetScores = () => fetch(`/quizzes/${quiz.id}/reset_quiz`);
@@ -43,20 +50,6 @@ const Results = ({ quiz }: { quiz: Quiz }): JSX.Element => {
 
   return (
     <div className='Results'>
-      <label htmlFor='number-to-show'>
-        Results to show:
-        <select
-          name='number-to-show'
-          id='number-to-show'
-          defaultValue={3}
-          onChange={(e) => setNumberToShow(parseInt(e.target.value))}>
-          {[...Array(currentQuiz.players.length)].map((e, i) => (
-            <option key={i + 1} value={i + 1}>
-              {i + 1}
-            </option>
-          ))}
-        </select>
-      </label>
       <button onClick={resetScores}>Reset Scores</button>
       {currentQuiz.players.map((player, index) => (
         <div key={index} className='player-stats'>

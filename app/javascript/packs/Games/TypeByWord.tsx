@@ -186,7 +186,12 @@ const TypeByWord = ({
               randomizedWords[currentWordIndex].length - currentWord.length
             )
           : ""}
-        {!listening && started ? currentWord : ""}
+        {!listening && started
+          ? randomizedWords[currentWordIndex].substring(
+              randomizedWords[currentWordIndex].length - currentWord.length,
+              randomizedWords[currentWordIndex].length
+            )
+          : ""}
       </div>
 
       <div className='canvas-container'>
