@@ -167,18 +167,19 @@ const TypeByWord = ({
       ) : (
         ""
       )}
-      <button
-        ref={btnRef}
-        className='start-btn'
-        onClick={() => {
-          if (btnRef.current) {
-            btnRef.current.blur();
-          }
-          bestTime ? reset() : setStarted(true);
-        }}>
-        {bestTime ? "TRY AGAIN" : "START"}
-      </button>
-
+      {!started ? (
+        <button
+          ref={btnRef}
+          className='start-btn'
+          onClick={() => {
+            if (btnRef.current) {
+              btnRef.current.blur();
+            }
+            bestTime ? reset() : setStarted(true);
+          }}>
+          {bestTime ? "TRY AGAIN" : "START"}
+        </button>
+      ) : undefined}
       <div style={{ fontSize: "50px" }}>
         {listening && started
           ? randomizedWords[currentWordIndex].substring(
